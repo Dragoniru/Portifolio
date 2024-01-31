@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculate the Fastest Route</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-900 text-white">
+    <div class="container mx-auto p-6">
+        <h1 class="text-4xl font-bold text-center mb-8">Calculate the Fastest Route</h1>
+    
+        {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                    <div class="{{ message.tags }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <div class="flex justify-between items-start">
+            <div class="w-1/2 p-4">
+                <h2 class="text-xl font-semibold mb-4">Route History:</h2>
+                <div class="space-y-3">
+                    {% for route in route_history %}
+                        <div class="bg-gray-700 p-2 rounded">
+                            <p>Start: {{ route.start }}</p>
+                            <p>Pickup: {{ route.pickup }}</p>
+                            <p>Delivery: {{ route.delivery }}</p>
+                            <p>Date: {{ route.date|date:"Y-m-d H:i" }}</p>
+                        </div>
+                    {% empty %}
+                        <p>No routes calculated yet.</p>
+                    {% endfor %}
+                </div>
+            </div>
+        
+            <div class="w-1/2 p-4">
+                <form method="post" class="space-y-3">
+                    {% csrf_token %}
+                    <div>
+                        <label for="route_start" class="block mb-2">Route Start:</label>
+                        <select name="route_start" id="route_start" class="w-full bg-gray-700 p-2 rounded">
+                            {% for position in chessboard_positions %}
+                                <option value="{{ position }}">{{ position }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div>
+                        <label for="pickup_point" class="block mb-2">Pickup Point:</label>
+                        <select name="pickup_point" id="pickup_point" class="w-full bg-gray-700 p-2 rounded">
+                            {% for position in chessboard_positions %}
+                                <option value="{{ position }}">{{ position }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div>
+                        <label for="delivery" class="block mb-2">Delivery:</label>
+                        <select name="delivery" id="delivery" class="w-full bg-gray-700 p-2 rounded">
+                            {% for position in chessboard_positions %}
+                                <option value="{{ position }}">{{ position }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="flex gap-4 justify-center">
+                        <button type="submit" class="bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded">Calculate Route</button>
+                        <button type="reset" class="bg-red-500 hover:bg-red-600 px-4 py-2 rounded">Clear</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
